@@ -8,7 +8,7 @@ import BButton from "./BButton";
 import DoneIcon from '@mui/icons-material/Done';
 import { Button, Grid } from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { AfterOpeningForm } from "../../Content/index";
+import { AfterOpeningForm } from "../Scripts/AfterOpeningForm";
 var formlink;
 var starting_time;
 var ending_time;
@@ -102,7 +102,7 @@ class Manual extends React.Component {
                         <Grid item>
 
                         </Grid>
-                        <Grid item sx={5}>
+                        <Grid item >
                             <TextField
 
                                 size="small"
@@ -117,7 +117,7 @@ class Manual extends React.Component {
                             />
 
                         </Grid>
-                        <Grid item sx={5}>
+                        <Grid item>
                             <TextField
                                 size="small"
                                 id="date"

@@ -1,16 +1,22 @@
-import { printLine } from './modules/print';
 
-console.log('Content mmmmmscript works!');
-function AfterOpeningForm(link, starttime, endtime) {
-    chrome.tabs.create({ url: link, active: true }, async (Tab) => {
-        chrome.tabs.onActivated.addListener(MakeTimmer(starttime, endtime, link))
-    });
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Contenttime from "./Contenttime";
+class App extends React.Component {
 
-}
-function MakeTimmer(starttime, endtime, link) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function () {
+  render() {
+    return (
+        <div style={{position: 'fixed', backgroundColor: '#f4c2c2' , textAlign:'center'}}>
+            <h1>Lets Go!!!</h1>
+            <Contenttime/>
+        </div>
+    );
+  }
+};
 
-    });
+let container = document.createElement('div');
+container.setAttribute("id", "app-wrapper");
+document.body.prepend(container);
 
-}
-export { AfterOpeningForm };
+ReactDOM.render(
+  <App/>, container);
