@@ -15,7 +15,8 @@ const CountDownTimer = ({hoursMinSecs}) => {
             setTime([hrs - 1, 59, 59]);
         } else if (secs === 0) {
             setTime([hrs, mins - 1, 59]);
-        } else {
+        } 
+        else {
             setTime([hrs, mins, secs - 1]);
         }
     };
@@ -30,7 +31,15 @@ const CountDownTimer = ({hoursMinSecs}) => {
         return () => clearInterval(timerId);
     });
 
-    
+    function add(mins)
+    {
+        if(mins===59)
+        {
+            setTime([parseInt(hrs)+1,0,secs])
+        }
+        else
+        setTime([hrs,parseInt(mins)+1,secs])
+    }
     return (
         <div>
         
@@ -42,7 +51,7 @@ const CountDownTimer = ({hoursMinSecs}) => {
             </div>
             <div>
             <Button variant="contained" size="small"  onClick={()=> setTime([0,0,0])}>Stop</Button>
-            <Button variant="contained" size="small" onClick={()=> setTime([hrs,mins+1,secs])} >Add</Button>
+            <Button variant="contained" size="small" onClick={()=> add(mins)} >Add</Button>
             </div>
         </div>
     );

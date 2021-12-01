@@ -13,7 +13,7 @@ class Contenttime extends React.Component{
         this.state = {
             hours: "7",
             minutes: "20",
-            seconds: "40"
+            seconds: "20"
         };
         this.reset=this.reset.bind(this);
         hoursMinSecs["hours"]=this.state.hours
