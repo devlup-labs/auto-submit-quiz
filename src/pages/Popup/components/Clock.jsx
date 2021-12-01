@@ -9,7 +9,8 @@ const CountDownTimer = ({hoursMinSecs}) => {
     const tick = () => {
    
         if (hrs === 0 && mins === 0 && secs === 0) 
-            reset()
+           reset()
+           
         else if (mins === 0 && secs === 0) {
             setTime([hrs - 1, 59, 59]);
         } else if (secs === 0) {
@@ -20,7 +21,8 @@ const CountDownTimer = ({hoursMinSecs}) => {
     };
 
 
-    const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
+    //const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
+    const reset = () => setTime([0,0,0]);
 
     
     React.useEffect(() => {
@@ -31,10 +33,17 @@ const CountDownTimer = ({hoursMinSecs}) => {
     
     return (
         <div>
-            <p>{`${hrs.toString().padStart(2, '0')}:${mins
-            .toString()
-            .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p> 
-            {/* <Button variant="contained" size="small" onClick={reset()}>Reset</Button>  */}
+        
+            <div>
+                <p>{`${hrs.toString().padStart(2, '0')}:${mins
+                .toString()
+                .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p> 
+           
+            </div>
+            <div>
+            <Button variant="contained" size="small"  onClick={()=> setTime([0,0,0])}>Stop</Button>
+            <Button variant="contained" size="small" onClick={()=> setTime([hrs,mins+1,secs])} >Add</Button>
+            </div>
         </div>
     );
 }

@@ -5,8 +5,8 @@ function AfterOpeningForm(link, starttime, endtime) {
 
 }
 function MakeTimmer(starttime, endtime, link) {
-    console.log("after is working!");
+    return starttime 
 }
 
 
-export { AfterOpeningForm };
+export { AfterOpeningForm ,MakeTimmer};
