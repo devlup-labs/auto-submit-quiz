@@ -6,6 +6,24 @@ import { Button, makeStyles } from '@mui/material';
 import CountDownTimer from "../Popup/components/Clock";
 import {MakeTimmer} from "../Popup/Scripts/AfterOpeningForm";
 var hoursMinSecs={hours:3, minutes: 20, seconds: 40};
+var start=0;
+var end=0;
+chrome.storage.sync.get("start_time", function (items){        
+    //console.log(items.start_time)
+    start=items.start_time;
+    console.log(start);
+
+  });
+chrome.storage.sync.get("end_time ", function (items){        
+    //console.log(items.end_time )
+    end=items.end_time
+    
+    console.log(end[0]);
+  });
+  setTimeout(()=>{
+      console.log(end-start)
+  },5000)
+//console.log(start);
 class Contenttime extends React.Component{
     constructor(props) {
         // starttime=5

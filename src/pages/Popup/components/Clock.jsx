@@ -11,6 +11,12 @@ const CountDownTimer = ({hoursMinSecs}) => {
         if (hrs === 0 && mins === 0 && secs === 0) 
            reset()
            
+        else if (hrs === 0 && mins === 0 && secs === 55)
+        {
+            autosubmit()
+            setTime([hrs , mins, secs-1]);
+        }
+           
         else if (mins === 0 && secs === 0) {
             setTime([hrs - 1, 59, 59]);
         } else if (secs === 0) {
@@ -39,6 +45,20 @@ const CountDownTimer = ({hoursMinSecs}) => {
         }
         else
         setTime([hrs,parseInt(mins)+1,secs])
+    }
+    function autosubmit()
+    {
+        if (document.querySelector("div.freebirdFormviewerViewNavigationNavControls > div > div > div")) 
+        {
+            chrome.storage.sync.set({"throughextension":false})
+            document.querySelector("div.freebirdFormviewerViewNavigationNavControls > div > div > div").click();
+            setTime([0,0,0])
+        }
+        else
+        {
+            return
+
+        }
     }
     return (
         <div>

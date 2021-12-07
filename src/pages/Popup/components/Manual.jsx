@@ -69,15 +69,25 @@ class Manual extends React.Component {
             ending_time: ""
         });
     }
-    AfterOpeningForm() {
-        console.log("yayyy!!!")
-    }
+    
     onSubmit(event) {
         var link = this.state.formlink
         var starttime = this.state.starting_time
         var endtime = this.state.ending_time
+        var throughextension=true;
         console.log("i am submit");
+        chrome.storage.sync.set({"throughextension":true });
+        chrome.storage.sync.set({"start_time":starttime });
+        chrome.storage.sync.set({"flink":endtime });
+        chrome.storage.sync.set({"end_time":endtime });
+
         AfterOpeningForm(link, starttime, endtime);
+        // var state = {        
+        //     Link: this.state.formlink,
+        //     starttime: this.state.starting_time,
+        //     endtime: this.state.ending_time
+        //   };
+        // Addtimer(state);
 
 
     }
@@ -109,12 +119,14 @@ class Manual extends React.Component {
                                 id="date"
                                 label="Start Time"
                                 type="datetime-local"
+                                //type="time"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
                                 value={this.state.starting_time}
                                 onChange={this.handletimeChange}
                             />
+                           
 
                         </Grid>
                         <Grid item>
