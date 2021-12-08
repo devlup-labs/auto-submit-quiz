@@ -78,7 +78,7 @@ class Manual extends React.Component {
         console.log("i am submit");
         chrome.storage.sync.set({"throughextension":true });
         chrome.storage.sync.set({"start_time":starttime });
-        chrome.storage.sync.set({"flink":endtime });
+        chrome.storage.sync.set({"flink":link });
         chrome.storage.sync.set({"end_time":endtime });
 
         AfterOpeningForm(link, starttime, endtime);

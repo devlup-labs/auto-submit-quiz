@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
 const CountDownTimer = ({hoursMinSecs}) => {
    
@@ -50,14 +50,13 @@ const CountDownTimer = ({hoursMinSecs}) => {
     {
         if (document.querySelector("div.freebirdFormviewerViewNavigationNavControls > div > div > div")) 
         {
-            chrome.storage.sync.set({"throughextension":false})
+           // chrome.storage.sync.set({"throughextension":false})
             document.querySelector("div.freebirdFormviewerViewNavigationNavControls > div > div > div").click();
             setTime([0,0,0])
         }
         else
         {
             return
-
         }
     }
     return (
@@ -70,8 +69,10 @@ const CountDownTimer = ({hoursMinSecs}) => {
            
             </div>
             <div>
-            <Button variant="contained" size="small"  onClick={()=> setTime([0,0,0])}>Stop</Button>
-            <Button variant="contained" size="small" onClick={()=> add(mins)} >Add</Button>
+            
+                <Button variant="contained" size="small"  onClick={()=> setTime([0,0,0])}>Stop</Button>
+                <Button variant="contained" size="small" onClick={()=> add(mins)} >Add</Button>
+            
             </div>
         </div>
     );

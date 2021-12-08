@@ -3,10 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Contenttime from "./Contenttime";
 
-// chrome.storage.local.get('formlink', function (result) {
-//   var channels = result.formlink;
-//   alert(channels);
-// })
 class App extends React.Component {
  
   render() {
