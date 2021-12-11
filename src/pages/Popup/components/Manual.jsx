@@ -113,16 +113,17 @@ class Manual extends React.Component {
     var CurrentDateAndTimeInMilliSeconds = Date.parse(now);
     var StartTimeMilliSeconds = Date.parse(starttime);
 
-    chrome.storage.sync.set({
-      DiffBtwStartAndCurrent:
-        StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
-    });
     if (
       StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds <= 8000 &&
       StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds >= 0
     ) {
       chrome.storage.sync.set({
         DiffBtwStartAndCurrent: 1000,
+      });
+    } else {
+      chrome.storage.sync.set({
+        DiffBtwStartAndCurrent:
+          StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
       });
     }
   }
