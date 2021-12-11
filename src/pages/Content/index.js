@@ -31,5 +31,6 @@ chrome.storage.sync.get("throughextension", function (items){
   }
 });
 
-  
+                                                                                                                                        
 chrome.storage.sync.set({"throughextension":false});
+

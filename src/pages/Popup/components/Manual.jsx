@@ -1,178 +1,201 @@
-import React from 'react'; import SvgIcon from '@mui/material/SvgIcon';
-import HomeIcon from '@mui/icons-material/Home';
-import Container from '@mui/material/Container';
+import React from 'react';
 import TextField from '@mui/material/TextField';
-import { makeStyles } from '@mui/core';
 import Box from '@mui/material/Box';
-import BButton from "./BButton";
-import DoneIcon from '@mui/icons-material/Done';
 import { Button, Grid } from '@mui/material';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { AfterOpeningForm } from "../Scripts/AfterOpeningForm";
-var formlink;
-var starting_time;
-var ending_time;
+
 class Manual extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            formlink: "",
-            starting_time: "",
-            ending_time: ""
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      formlink: '',
+      starting_time: '',
+      ending_time: '',
+      StartTimeError: false,
+      EndTimeError: false,
+      SubmitDiabled: true,
+    };
 
-        this.handlelinkChange = this.handlelinkChange.bind(this);
-        this.handletimeChange = this.handletimeChange.bind(this);
-        this.handletimeChangeending = this.handletimeChangeending.bind(this);
-        this.onreset = this.onreset.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+    this.handlelinkChange = this.handlelinkChange.bind(this);
+    this.handletimeChange = this.handletimeChange.bind(this);
+    this.handletimeChangeending = this.handletimeChangeending.bind(this);
+    this.onreset = this.onreset.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.check = this.check.bind(this);
+  }
 
+  handlelinkChange(event) {
+    var link = event.target.value;
+
+    this.setState({
+      formlink: link,
+    });
+  }
+  handletimeChange = async (event) => {
+    var start = event.target.value;
+    var error = false;
+    var StartTime = new Date(start);
+    if (start === '') {
+      error = true;
     }
-
-
-    handlelinkChange(event) {
-        var link = event.target.value;
-        this.setState(
-            {
-                formlink: link,
-            }
-        );
-        formlink = this.state.formlink
-        console.log(formlink)
-    }
-    handletimeChange(event) {
-        var start = event.target.value;
-        this.setState(
-            {
-                starting_time: start,
-            }
-        );
-        console.log(start)
-        starting_time = start;
-    }
-    handletimeChangeending(event) {
-        var end = event.target.value;
-        this.setState(
-            {
-                ending_time: end,
-            }
-        );
-        console.log("ending input is working")
-
-        ending_time = end;
-    }
-    onreset(event) {
-        console.log("i am reset")
+    await this.setState({
+      starting_time: start,
+      StartTimeError: error,
+    });
+    if (this.state.ending_time !== '') {
+      var endTimeVal = new Date(this.state.ending_time);
+      if (StartTime >= endTimeVal) {
+        error = true;
         this.setState({
-            formlink: "",
-            starting_time: "",
-            ending_time: ""
+          EndTimeError: error,
         });
+      }
     }
-    
-    onSubmit(event) {
-        var link = this.state.formlink
-        var starttime = this.state.starting_time
-        var endtime = this.state.ending_time
-        var throughextension=true;
-        console.log("i am submit");
-        chrome.storage.sync.set({"throughextension":true });
-        chrome.storage.sync.set({"start_time":starttime });
-        chrome.storage.sync.set({"flink":link });
-        chrome.storage.sync.set({"end_time":endtime });
-
-        AfterOpeningForm(link, starttime, endtime);
-        // var state = {        
-        //     Link: this.state.formlink,
-        //     starttime: this.state.starting_time,
-        //     endtime: this.state.ending_time
-        //   };
-        // Addtimer(state);
-
-
+    //console.log(error);
+    this.check();
+  };
+  handletimeChangeending = async (event) => {
+    var end = event.target.value;
+    var error = false;
+    var StartTime = new Date(this.state.starting_time);
+    var EndTime = new Date(end);
+    if (end === '' || EndTime < new Date() || StartTime >= EndTime) {
+      error = true;
     }
-    render() {
-        return (
-            < div margin="0" >
-                <form noValidate autoComplete="off">
-                    <Box m={1}>
-                        <TextField id="standard-basic"
-                            label="Form Link"
-                            variant="standard"
-                            size="large"
-                            fullWidth
-                            fontSize="50"
-                            value={this.state.formlink}
-                            onChange={this.handlelinkChange}
-                        >
-                        </TextField>
-                    </Box>
+    await this.setState({
+      EndTimeError: error,
+      ending_time: end,
+    });
+    //console.log(error);
+    this.check();
+  };
+  onreset(event) {
+    console.log('i am reset');
+    this.setState({
+      formlink: '',
+      starting_time: '',
+      ending_time: '',
+    });
+    chrome.alarms.clear('Open the form', function () {
+      console.log('Alarm cleared Enter the new values');
+    });
+  }
+  check = () => {
+    if (
+      this.state.EndTimeError === false &&
+      this.state.StartTimeError === false &&
+      this.state.ending_time !== '' &&
+      this.state.starting_time !== ''
+    ) {
+      console.log('check is working');
+      this.setState({ SubmitDiabled: false });
+    } else {
+      console.log('check else is working');
+      this.setState({ SubmitDiabled: true });
+    }
+    console.log(this.state.EndTimeError);
+    console.log(this.state.StartTimeError);
+    console.log(this.state.ending_time);
+    console.log(this.state.starting_time);
+  };
+  onSubmit(event) {
+    var link = this.state.formlink;
+    var starttime = this.state.starting_time;
+    var endtime = this.state.ending_time;
+    var throughextension = true;
+    console.log('i am submit');
+    chrome.storage.sync.set({ throughextension: true });
+    chrome.storage.sync.set({ start_time: starttime });
+    chrome.storage.sync.set({ flink: link });
+    chrome.storage.sync.set({ end_time: endtime });
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    now = now.toISOString().slice(0, 16);
+    var CurrentDateAndTimeInMilliSeconds = Date.parse(now);
+    var StartTimeMilliSeconds = Date.parse(starttime);
 
-                    <Grid container style={{ gap: 15 }} justifyContent="center">
-                        <Grid item>
+    chrome.storage.sync.set({
+      DiffBtwStartAndCurrent:
+        StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
+    });
+    if (
+      StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds <= 8000 &&
+      StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds >= 0
+    ) {
+      chrome.storage.sync.set({
+        DiffBtwStartAndCurrent: 1000,
+      });
+    }
+  }
+  render() {
+    return (
+      <div margin="0">
+        <form noValidate autoComplete="off">
+          <Box m={1}>
+            <TextField
+              id="standard-basic"
+              label="Form Link"
+              variant="standard"
+              size="large"
+              fullWidth
+              fontSize="50"
+              value={this.state.formlink}
+              onChange={this.handlelinkChange}
+            ></TextField>
+          </Box>
 
-                        </Grid>
-                        <Grid item >
-                            <TextField
+          <Grid container style={{ gap: 15 }} justifyContent="center">
+            <Grid item></Grid>
+            <Grid item>
+              <TextField
+                size="small"
+                id="date"
+                label="Start Time"
+                type="datetime-local"
+                //type="time"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={this.state.starting_time}
+                onChange={this.handletimeChange}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                size="small"
+                id="date"
+                label="End Time"
+                type="datetime-local"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={this.state.ending_time}
+                onChange={this.handletimeChangeending}
+              />
+            </Grid>
+          </Grid>
 
-                                size="small"
-                                id="date"
-                                label="Start Time"
-                                type="datetime-local"
-                                //type="time"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value={this.state.starting_time}
-                                onChange={this.handletimeChange}
-                            />
-                           
-
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                size="small"
-                                id="date"
-                                label="End Time"
-                                type="datetime-local"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                value={this.state.ending_time}
-                                onChange={this.handletimeChangeending}
-                            />
-                        </Grid>
-                    </Grid>
-
-                    <Grid container spacing={0} justifyContent="center">
-                        {/* <BButton name={"Submit"} />
+          <Grid container spacing={0} justifyContent="center">
+            {/* <BButton name={"Submit"} />
                         <BButton name={"Reset"} reset={this.onreset}
                         /> */}
-                        <Box m={1} pt={2} display="block">
-
-                            <Button variant="contained"
-                                onClick={this.onreset}
-                            >
-                                Reset
-
-
-                            </Button>
-                        </Box>
-                        <Box m={1} pt={2} display="block">
-
-                            <Button variant="contained"
-                                onClick={this.onSubmit}
-                            >
-                                Submit
-
-
-                            </Button>
-                        </Box>
-                    </Grid>
-
-                </form>
-            </div >
-        );
-    }
+            <Box m={1} pt={2} display="block">
+              <Button variant="contained" onClick={this.onreset}>
+                Reset
+              </Button>
+            </Box>
+            <Box m={1} pt={2} display="block">
+              <Button
+                variant="contained"
+                onClick={this.onSubmit}
+                disabled={this.state.SubmitDiabled}
+              >
+                Submit
+              </Button>
+            </Box>
+          </Grid>
+        </form>
+      </div>
+    );
+  }
 }
 export default Manual;
