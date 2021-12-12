@@ -43,9 +43,15 @@ chrome.storage.onChanged.addListener((changes, area) => {
           let DueTimeDiv=document.querySelector("div.asQXV.hnID5d")
           let EndTimeTemp=DueTimeDiv.innerText
           let EndTime1=EndTimeTemp.replace('Due ','')
-          var utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-          var EndTime2=utc+ " "+ EndTime1
+          var today = new Date();
+          var dd = String(today.getDate()).padStart(2, '0');
+          var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+          var yyyy = today.getFullYear();
+          today = mm + '/' + dd + '/' + yyyy;
+          var EndTime2=today+ " "+ EndTime1
+          console.log(EndTime2)
           var EndTime3=new Date(EndTime2)
+
           console.log(Date.parse(EndTime3))
           let CurrentDate=new Date()
           console.log(Date.parse(CurrentDate))

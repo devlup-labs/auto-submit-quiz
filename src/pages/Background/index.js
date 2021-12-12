@@ -55,14 +55,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
       chrome.storage.sync.get("flink", function (items){        
         console.log(items.flink)
          link2=items.flink
+         chrome.tabs.create({ url: link2, active: true })
       });
       console.log(link2)
       console.log("2worked")
-      if (link2!='')
-      chrome.tabs.create({ url: link2, active: true })
-      
-
-   
     }
   });
 
