@@ -31,6 +31,35 @@ chrome.storage.sync.get("throughextension", function (items){
   }
 });
 
-                                                                                                                                        
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.AutoSumitButton?.newValue) {
+    chrome.storage.sync.get("AutoSumitButton", function (items){       
+      if(items.AutoSumitButton===true)
+      {
+        console.log("i am autosubmit content working")
+        if(document.querySelector("div.asQXV.hnID5d"))
+        {
+          chrome.storage.sync.set({"throughextension":true});
+          let DueTimeDiv=document.querySelector("div.asQXV.hnID5d")
+          let EndTimeTemp=DueTimeDiv.innerText
+          let EndTime1=EndTimeTemp.replace('Due ','')
+          var utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+          var EndTime2=utc+ " "+ EndTime1
+          var EndTime3=new Date(EndTime2)
+          console.log(Date.parse(EndTime3))
+          let CurrentDate=new Date()
+          console.log(Date.parse(CurrentDate))
+          chrome.storage.sync.set({ start_time:Date.parse(CurrentDate) });
+          chrome.storage.sync.set({ flink: "https://forms.gle/HQBiTjuGiiz7fd7z7" });
+          chrome.storage.sync.set({ end_time:Date.parse(EndTime3)});
+          chrome.storage.sync.set({ "AutoFinalValuesAdded":true });
+          chrome.storage.sync.set({"AutoSumitButton":false});
+        }
+        chrome.storage.sync.set({"AutoSumitButton":false});
+      }
+    }); 
+
+  }
+});                                                                                                                                        
 chrome.storage.sync.set({"throughextension":false});
 

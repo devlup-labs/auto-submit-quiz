@@ -101,12 +101,14 @@ class Manual extends React.Component {
     var link = this.state.formlink;
     var starttime = this.state.starting_time;
     var endtime = this.state.ending_time;
-    var throughextension = true;
+    var StartTimeInMilliseconds = Date.parse(starttime);
+    var EndTimeInMilliseconds = Date.parse(endtime);
+
     console.log('i am submit');
     chrome.storage.sync.set({ throughextension: true });
-    chrome.storage.sync.set({ start_time: starttime });
+    chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
-    chrome.storage.sync.set({ end_time: endtime });
+    chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
     var now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     now = now.toISOString().slice(0, 16);
