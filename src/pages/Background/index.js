@@ -17,8 +17,14 @@ chrome.runtime.onInstalled.addListener(()=>{
     console.log("defaul values set");
 })
 
+async function onAlarm(alarm) {
+  console.log("i will work for sure")
+  chrome.tabs.create({ url: link, active: true })
+
+}
 
 var link=""
+var AlarmTime;
 chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'sync' && changes.DiffBtwStartAndCurrent?.newValue) {
       
@@ -30,18 +36,18 @@ chrome.storage.onChanged.addListener((changes, area) => {
       
       chrome.storage.sync.get("DiffBtwStartAndCurrent", function (items){        
           console.log("helloo")
+          AlarmTime=Date.now()+items.DiffBtwStartAndCurrent
           chrome.alarms.create(
               "Open the form",
-              {when:Date.now()+items.DiffBtwStartAndCurrent},
+              {when:AlarmTime,periodInMinutes:null},
             )
+            console.log(AlarmTime)
+          chrome.alarms.onAlarm.addListener(onAlarm);
+
+          return;
         });
-      chrome.alarms.onAlarm.addListener( function(alarm){
-          console.log("i will work for sure")
-          chrome.tabs.create({ url: link, active: true })
-      })
-      chrome.alarms.clear('Open the form', function () {
-        console.log('Alarm cleared Enter the new values');
-      });
+    
+      
 
       
     }

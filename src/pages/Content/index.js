@@ -37,8 +37,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
       if(items.AutoSumitButton===true)
       {
         console.log("i am autosubmit content working")
-        if(document.querySelector("div.asQXV.hnID5d"))
+        if(document.querySelector("div.asQXV.hnID5d") && document.querySelector("div.r0VQac.QRiHXd.Aopndd > a"))
         {
+          let form=document.querySelector("div.r0VQac.QRiHXd.Aopndd > a")
+          let formlink=form.href
           chrome.storage.sync.set({"throughextension":true});
           let DueTimeDiv=document.querySelector("div.asQXV.hnID5d")
           let EndTimeTemp=DueTimeDiv.innerText
@@ -56,7 +58,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
           let CurrentDate=new Date()
           console.log(Date.parse(CurrentDate))
           chrome.storage.sync.set({ start_time:Date.parse(CurrentDate) });
-          chrome.storage.sync.set({ flink: "https://forms.gle/HQBiTjuGiiz7fd7z7" });
+          chrome.storage.sync.set({ flink: formlink});
           chrome.storage.sync.set({ end_time:Date.parse(EndTime3)});
           chrome.storage.sync.set({ "AutoFinalValuesAdded":true });
           chrome.storage.sync.set({"AutoSumitButton":false});
