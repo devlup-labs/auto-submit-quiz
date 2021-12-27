@@ -17,7 +17,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://docs.google.com/forms/*"
+        "https://docs.google.com/forms/*",
+        "https://classroom.google.com/*"
       ],
       "js": [
         "contentScript.bundle.js"
