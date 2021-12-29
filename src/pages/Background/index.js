@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 let flink = "https://docs.google.com/forms/"
 let start_time=""
 let end_time=""
@@ -16,6 +17,12 @@ chrome.runtime.onInstalled.addListener(()=>{
 
     console.log("defaul values set");
 })
+function CreateUniqueAlarmId()
+{
+  return  uuidv4();
+
+}
+
 
 async function onAlarm(alarm) {
   console.log("i will work for sure")
@@ -24,21 +31,22 @@ async function onAlarm(alarm) {
 }
 
 var link=""
+var AlramId=""
 var AlarmTime;
 chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'sync' && changes.DiffBtwStartAndCurrent?.newValue) {
       
       console.log('enable debug mode?');
       chrome.storage.sync.get("flink", function (items){        
-        console.log(items.flink)
          link=items.flink
       });
       
       chrome.storage.sync.get("DiffBtwStartAndCurrent", function (items){        
-          console.log("helloo")
           AlarmTime=Date.now()+items.DiffBtwStartAndCurrent
+          var AlramName=CreateUniqueAlarmId();
+          console.log(AlramName)
           chrome.alarms.create(
-              "Open the form",
+              AlramName,
               {when:AlarmTime,periodInMinutes:null},
             )
             console.log(AlarmTime)
