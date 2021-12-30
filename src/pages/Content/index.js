@@ -17,7 +17,8 @@ class App extends React.Component {
     );
   }
 };
-chrome.storage.sync.get("throughextension", function (items){        
+chrome.storage.sync.get("throughextension", function (items){    
+  console.log("conten through ex")    
   console.log(items.throughextension)
   if(items.throughextension===true)
   {

@@ -105,7 +105,7 @@ class Manual extends React.Component {
     var EndTimeInMilliseconds = Date.parse(endtime);
 
     console.log('i am submit');
-    chrome.storage.sync.set({ throughextension: true });
+
     chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
     chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
@@ -120,6 +120,7 @@ class Manual extends React.Component {
         DiffBtwStartAndCurrent: 1000,
       });
     } else {
+      alert('Alram added !!!');
       chrome.storage.sync.set({
         DiffBtwStartAndCurrent:
           StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
