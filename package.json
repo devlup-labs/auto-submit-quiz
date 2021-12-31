@@ -1,11 +1,11 @@
 {
   "name": "Quizautosubmit",
   "version": "4.0.1",
-  "description": "A chrome extension boilerplate built with React 17 and Webpack 5",
+  "description": "Google forms auto-submit application built with React JS",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dhruv-Mahajan1/chrome-extension-boilerplate-react"
+    "url": "https://github.com/devlup-labs/auto-submit-quiz"
   },
   "scripts": {
     "build": "node utils/build.js",
