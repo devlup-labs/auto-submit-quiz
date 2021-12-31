@@ -41,7 +41,7 @@ var options = {
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
   },
   chromeExtensionBoilerplate: {
-    notHotReload: ['contentScript', 'devtools'],
+    notHotReload: ['contentScript'],
   },
   output: {
     path: path.resolve(__dirname, 'build'),
