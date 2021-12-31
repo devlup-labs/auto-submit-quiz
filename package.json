@@ -1,7 +1,7 @@
 {
   "name": "Quizautosubmit",
   "version": "4.0.1",
-  "description": "Auto-Submit-Quiz application built with React 17 and Webpack 5",
+  "description": "Google forms auto-submit application built with React JS",
   "license": "MIT",
   "repository": {
     "type": "git",
