@@ -1,73 +1,51 @@
-let flink = "https://docs.google.com/forms/"
-let start_time=""
-let end_time=""
-let throughextension=false
-let DiffBtwStartAndCurrent=0
-let AutoSumitButton=false
-let AutoFinalValuesAdded=false
-chrome.runtime.onInstalled.addListener(()=>{
-    chrome.storage.sync.set({ flink });
-    chrome.storage.sync.set({ start_time });
-    chrome.storage.sync.set({ throughextension });
-    chrome.storage.sync.set({ end_time });
-    chrome.storage.sync.set({ DiffBtwStartAndCurrent });
-    chrome.storage.sync.set({ AutoSumitButton });
-    chrome.storage.sync.set({ AutoFinalValuesAdded });
+let formLink = 'https://docs.google.com/forms/';
+var alarmTime;
+let startTime = '';
+let endTime = '';
+let throughExtension = false;
+let DiffBtwStartAndCurrent = 0;
+let AutoSumitButton = false;
+let AutoFinalValuesAdded = false;
 
-    console.log("defaul values set");
-})
+const onAlarm = async (alarm) => {
+  chrome.tabs.create({ url: link, active: true });
+};
 
-async function onAlarm(alarm) {
-  console.log("i will work for sure")
-  chrome.tabs.create({ url: link, active: true })
-
-}
-
-var link=""
-var AlarmTime;
 chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'sync' && changes.DiffBtwStartAndCurrent?.newValue) {
-      
-      console.log('enable debug mode?');
-      chrome.storage.sync.get("flink", function (items){        
-        console.log(items.flink)
-         link=items.flink
+  if (area === 'sync' && changes.DiffBtwStartAndCurrent?.newValue) {
+    chrome.storage.sync.get('formLink', (items) => {
+      formLink = items.formLink;
+    });
+
+    chrome.storage.sync.get('DiffBtwStartAndCurrent', (items) => {
+      alarmTime = Date.now() + items.DiffBtwStartAndCurrent;
+      chrome.alarms.create('Open the form', {
+        when: alarmTime,
+        periodInMinutes: null,
       });
-      
-      chrome.storage.sync.get("DiffBtwStartAndCurrent", function (items){        
-          console.log("helloo")
-          AlarmTime=Date.now()+items.DiffBtwStartAndCurrent
-          chrome.alarms.create(
-              "Open the form",
-              {when:AlarmTime,periodInMinutes:null},
-            )
-            console.log(AlarmTime)
-          chrome.alarms.onAlarm.addListener(onAlarm);
+      console.log(`Alarm at: ${alarmTime}, link: ${formLink}`);
+      chrome.alarms.onAlarm.addListener(onAlarm);
+    });
+  }
+});
 
-          return;
-        });
-    
-      
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.AutoFinalValuesAdded?.newValue) {
+    chrome.storage.sync.set({ AutoFinalValuesAdded: false });
+    chrome.storage.sync.get('formLink', (items) => {
+      chrome.tabs.create({ url: items.formLink, active: true });
+    });
+  }
+});
 
-      
-    }
-  });
-  var link2=''
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'sync' && changes.AutoFinalValuesAdded?.newValue) {
-      
-      chrome.storage.sync.set({ "AutoFinalValuesAdded":false });
-      console.log('enable debug mode?');
-      chrome.storage.sync.get("flink", function (items){        
-        console.log(items.flink)
-         link2=items.flink
-         chrome.tabs.create({ url: link2, active: true })
-      });
-      console.log(link2)
-      console.log("2worked")
-    }
-  });
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({ formLink });
+  chrome.storage.sync.set({ startTime });
+  chrome.storage.sync.set({ throughExtension });
+  chrome.storage.sync.set({ endTime });
+  chrome.storage.sync.set({ DiffBtwStartAndCurrent });
+  chrome.storage.sync.set({ AutoSumitButton });
+  chrome.storage.sync.set({ AutoFinalValuesAdded });
 
-
-
-    
+  console.log('Default values set\n');
+});

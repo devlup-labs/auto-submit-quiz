@@ -1,7 +1,4 @@
-import React, { Children } from 'react';
-import Container from '@mui/material/Container';
-import { Grid } from '@mui/material';
-import Link from '@mui/material/Link';
+import React from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
@@ -10,7 +7,6 @@ import Auto from './Auto';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return <div>{value === index && <Box>{children}</Box>}</div>;
 }
 

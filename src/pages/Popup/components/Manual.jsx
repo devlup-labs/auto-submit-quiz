@@ -10,9 +10,9 @@ class Manual extends React.Component {
       formlink: '',
       starting_time: '',
       ending_time: '',
-      StartTimeError: false,
-      EndTimeError: false,
-      SubmitDiabled: true,
+      startTimeError: false,
+      endTimeError: false,
+      submitDiabled: true,
     };
 
     this.handlelinkChange = this.handlelinkChange.bind(this);
@@ -30,6 +30,7 @@ class Manual extends React.Component {
       formlink: link,
     });
   }
+
   handletimeChange = async (event) => {
     var start = event.target.value;
     var error = false;
@@ -39,20 +40,20 @@ class Manual extends React.Component {
     }
     await this.setState({
       starting_time: start,
-      StartTimeError: error,
+      startTimeError: error,
     });
     if (this.state.ending_time !== '') {
       var endTimeVal = new Date(this.state.ending_time);
       if (StartTime >= endTimeVal) {
         error = true;
         this.setState({
-          EndTimeError: error,
+          endTimeError: error,
         });
       }
     }
-    //console.log(error);
     this.check();
   };
+
   handletimeChangeending = async (event) => {
     var end = event.target.value;
     var error = false;
@@ -62,13 +63,14 @@ class Manual extends React.Component {
       error = true;
     }
     await this.setState({
-      EndTimeError: error,
+      endTimeError: error,
       ending_time: end,
     });
     //console.log(error);
     this.check();
   };
-  onreset(event) {
+
+  onreset = (event) => {
     console.log('i am reset');
     this.setState({
       formlink: '',
@@ -78,26 +80,28 @@ class Manual extends React.Component {
     chrome.alarms.clear('Open the form', function () {
       console.log('Alarm cleared Enter the new values');
     });
-  }
+  };
+
   check = () => {
     if (
-      this.state.EndTimeError === false &&
-      this.state.StartTimeError === false &&
+      this.state.endTimeError === false &&
+      this.state.startTimeError === false &&
       this.state.ending_time !== '' &&
       this.state.starting_time !== ''
     ) {
       console.log('check is working');
-      this.setState({ SubmitDiabled: false });
+      this.setState({ submitDiabled: false });
     } else {
       console.log('check else is working');
-      this.setState({ SubmitDiabled: true });
+      this.setState({ submitDiabled: true });
     }
-    console.log(this.state.EndTimeError);
-    console.log(this.state.StartTimeError);
+    console.log(this.state.endTimeError);
+    console.log(this.state.startTimeError);
     console.log(this.state.ending_time);
     console.log(this.state.starting_time);
   };
-  onSubmit(event) {
+
+  onSubmit = (event) => {
     var link = this.state.formlink;
     var starttime = this.state.starting_time;
     var endtime = this.state.ending_time;
@@ -105,10 +109,10 @@ class Manual extends React.Component {
     var EndTimeInMilliseconds = Date.parse(endtime);
 
     console.log('i am submit');
-    chrome.storage.sync.set({ throughextension: true });
-    chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
-    chrome.storage.sync.set({ flink: link });
-    chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
+    chrome.storage.sync.set({ throughExtension: true });
+    chrome.storage.sync.set({ startTime: StartTimeInMilliseconds });
+    chrome.storage.sync.set({ formLink: link });
+    chrome.storage.sync.set({ endTime: EndTimeInMilliseconds });
     var now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     now = now.toISOString().slice(0, 16);
@@ -128,7 +132,8 @@ class Manual extends React.Component {
           StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
       });
     }
-  }
+  };
+
   render() {
     return (
       <div margin="0">
@@ -178,8 +183,8 @@ class Manual extends React.Component {
           </Grid>
 
           <Grid container spacing={0} justifyContent="center">
-            {/* <BButton name={"Submit"} />
-                        <BButton name={"Reset"} reset={this.onreset}
+            {/* <Button name={"Submit"} />
+                        <Button name={"Reset"} reset={this.onreset}
                         /> */}
             <Box m={1} pt={2} display="block">
               <Button variant="contained" onClick={this.onreset}>
@@ -190,7 +195,7 @@ class Manual extends React.Component {
               <Button
                 variant="contained"
                 onClick={this.onSubmit}
-                disabled={this.state.SubmitDiabled}
+                disabled={this.state.submitDiabled}
               >
                 Submit
               </Button>
