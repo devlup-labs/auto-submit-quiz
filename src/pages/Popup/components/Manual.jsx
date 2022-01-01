@@ -75,9 +75,6 @@ class Manual extends React.Component {
       starting_time: '',
       ending_time: '',
     });
-    chrome.alarms.clear('Open the form', function () {
-      console.log('Alarm cleared Enter the new values');
-    });
   }
   check = () => {
     if (
@@ -120,11 +117,11 @@ class Manual extends React.Component {
         DiffBtwStartAndCurrent: 1000,
       });
     } else {
-      alert('Alram added !!!');
       chrome.storage.sync.set({
         DiffBtwStartAndCurrent:
           StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
       });
+      this.onreset();
     }
     // chrome.storage.sync.set({
     //   DiffBtwStartAndCurrent: Math.abs(

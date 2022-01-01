@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quizautosubmit",
-  "options_page": "options.html",
+
   "background": {
     "service_worker": "background.bundle.js"
   },
@@ -20,16 +20,8 @@
         "https://docs.google.com/forms/*",
         "https://classroom.google.com/*"
       ],
-      "js": [
-        "contentScript.bundle.js"
-      ]
+      "js": ["contentScript.bundle.js"]
     }
   ],
-  "permissions": [
-    "storage",
-    "alarms",
-    "tabs",
-    "activeTab",
-    "scripting"
-  ]
+  "permissions": ["storage", "alarms", "tabs", "activeTab", "scripting"]
 }

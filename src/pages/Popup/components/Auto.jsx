@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button } from '@mui/material';
+import { Box } from '@mui/system';
 
 class Auto extends React.Component {
   constructor(props) {
@@ -18,9 +19,11 @@ class Auto extends React.Component {
     return (
       <div>
         <form noValidate autoComplete="off">
-          <Button variant="contained" onClick={this.onSubmitAuto}>
-            Submit
-          </Button>
+          <Box p={4} justifyContent="center">
+            <Button variant="contained" onClick={this.onSubmitAuto}>
+              Submit
+            </Button>
+          </Box>
         </form>
       </div>
     );
