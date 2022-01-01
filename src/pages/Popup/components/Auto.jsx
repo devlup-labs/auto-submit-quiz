@@ -7,14 +7,16 @@ class Auto extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      SubmitDiabled: true,
+      submitDiabled: true,
     };
     this.onSubmitAuto = this.onSubmitAuto.bind(this);
   }
+
   onSubmitAuto(event) {
     console.log('auto submit button is working');
     chrome.storage.sync.set({ AutoSumitButton: true });
   }
+
   render() {
     return (
       <div>
