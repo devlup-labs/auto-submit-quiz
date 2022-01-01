@@ -1,7 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Quizautosubmit",
-  "options_page": "options.html",
+  "name": "google-form-autosubmit",
   "background": {
     "service_worker": "background.bundle.js"
   },
