@@ -1,16 +1,14 @@
 import React from 'react';
+import Box from '@mui/material/Box';
 import { Button, Grid } from '@mui/material';
 import './Clock.css';
-
 const CountDownTimer = ({ hoursMinSecs }) => {
   const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
-
   const [[hrs, mins, secs], setTime] = React.useState([
     hours,
     minutes,
     seconds,
   ]);
-
   const tick = () => {
     if (hrs === 0 && mins === 0 && secs === 0) reset();
     else if (hrs === 0 && mins === 0 && secs === 55) {
@@ -25,6 +23,7 @@ const CountDownTimer = ({ hoursMinSecs }) => {
     }
   };
 
+  //const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
   const reset = () => setTime([0, 0, 0]);
 
   React.useEffect(() => {
@@ -37,14 +36,13 @@ const CountDownTimer = ({ hoursMinSecs }) => {
       setTime([parseInt(hrs) + 1, 0, secs]);
     } else setTime([hrs, parseInt(mins) + 1, secs]);
   }
-
   function autosubmit() {
     if (
       document.querySelector(
         'div.freebirdFormviewerViewNavigationNavControls > div > div > div'
       )
     ) {
-      // chrome.storage.sync.set({"throughExtension":false})
+      // chrome.storage.sync.set({"throughextension":false})
       document
         .querySelector(
           'div.freebirdFormviewerViewNavigationNavControls > div > div > div'
@@ -55,7 +53,6 @@ const CountDownTimer = ({ hoursMinSecs }) => {
       return;
     }
   }
-
   return (
     <div>
       <div className="time">
@@ -63,6 +60,11 @@ const CountDownTimer = ({ hoursMinSecs }) => {
           .toString()
           .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p>
       </div>
+      {/* <Box m={0.75} mt={0} p={1} display="block">
+        
+
+        
+      </Box> */}
       <Grid container spacing={0.5} className="buttons">
         <Grid item>
           {' '}

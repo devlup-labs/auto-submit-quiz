@@ -1,17 +1,19 @@
 import React from 'react';
+
+// import CountdownTimer from "react-component-countdown-timer";
 import CountDownTimer from '../Popup/components/Clock';
 
 var hoursMinSecs = { hours: 3, minutes: 20, seconds: 40 };
 var start = 0;
 var end = 0;
 
-chrome.storage.sync.get('startTime', function (items) {
-  start = items.startTime;
+chrome.storage.sync.get('start_time', function (items) {
+  start = items.start_time;
   console.log(start);
 });
-
-chrome.storage.sync.get('endTime', function (items) {
-  end = items.endTime;
+chrome.storage.sync.get('end_time', function (items) {
+  //console.log(items.end_time )
+  end = items.end_time;
 });
 function GetTimeDiffInHoursMinutesSeconds(diff) {
   var msec = diff;
@@ -26,7 +28,7 @@ function GetTimeDiffInHoursMinutesSeconds(diff) {
   hoursMinSecs['hours'] = hh;
   hoursMinSecs['minutes'] = mm;
 }
-class ContentTimer extends React.Component {
+class Contenttime extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,4 +49,4 @@ class ContentTimer extends React.Component {
     );
   }
 }
-export default ContentTimer;
+export default Contenttime;
