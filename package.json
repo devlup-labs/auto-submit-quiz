@@ -1,6 +1,5 @@
 {
-
-  "name": "google-form-autosubmit",
+  "name": "quizautosubmit",
   "version": "4.0.1",
   "description": "Google forms auto-submit application built with React JS",
   "license": "MIT",

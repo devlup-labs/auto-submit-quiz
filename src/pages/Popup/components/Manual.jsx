@@ -10,9 +10,9 @@ class Manual extends React.Component {
       formlink: '',
       starting_time: '',
       ending_time: '',
-      startTimeError: false,
-      endTimeError: false,
-      submitDiabled: true,
+      StartTimeError: false,
+      EndTimeError: false,
+      SubmitDiabled: true,
     };
 
     this.handlelinkChange = this.handlelinkChange.bind(this);
@@ -30,7 +30,6 @@ class Manual extends React.Component {
       formlink: link,
     });
   }
-
   handletimeChange = async (event) => {
     var start = event.target.value;
     var error = false;
@@ -40,20 +39,20 @@ class Manual extends React.Component {
     }
     await this.setState({
       starting_time: start,
-      startTimeError: error,
+      StartTimeError: error,
     });
     if (this.state.ending_time !== '') {
       var endTimeVal = new Date(this.state.ending_time);
       if (StartTime >= endTimeVal) {
         error = true;
         this.setState({
-          endTimeError: error,
+          EndTimeError: error,
         });
       }
     }
+    //console.log(error);
     this.check();
   };
-
   handletimeChangeending = async (event) => {
     var end = event.target.value;
     var error = false;
@@ -63,43 +62,39 @@ class Manual extends React.Component {
       error = true;
     }
     await this.setState({
-      endTimeError: error,
+      EndTimeError: error,
       ending_time: end,
     });
     //console.log(error);
     this.check();
   };
-
-  onreset = (event) => {
+  onreset(event) {
     console.log('i am reset');
     this.setState({
       formlink: '',
       starting_time: '',
       ending_time: '',
     });
-
   }
-
   check = () => {
     if (
-      this.state.endTimeError === false &&
-      this.state.startTimeError === false &&
+      this.state.EndTimeError === false &&
+      this.state.StartTimeError === false &&
       this.state.ending_time !== '' &&
       this.state.starting_time !== ''
     ) {
       console.log('check is working');
-      this.setState({ submitDiabled: false });
+      this.setState({ SubmitDiabled: false });
     } else {
       console.log('check else is working');
-      this.setState({ submitDiabled: true });
+      this.setState({ SubmitDiabled: true });
     }
-    console.log(this.state.endTimeError);
-    console.log(this.state.startTimeError);
+    console.log(this.state.EndTimeError);
+    console.log(this.state.StartTimeError);
     console.log(this.state.ending_time);
     console.log(this.state.starting_time);
   };
-
-  onSubmit = (event) => {
+  onSubmit(event) {
     var link = this.state.formlink;
     var starttime = this.state.starting_time;
     var endtime = this.state.ending_time;
@@ -107,7 +102,6 @@ class Manual extends React.Component {
     var EndTimeInMilliseconds = Date.parse(endtime);
 
     console.log('i am submit');
-
 
     chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
@@ -129,9 +123,12 @@ class Manual extends React.Component {
       });
       this.onreset();
     }
-
-  };
-
+    // chrome.storage.sync.set({
+    //   DiffBtwStartAndCurrent: Math.abs(
+    //     StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds
+    //   ),
+    // });
+  }
   render() {
     return (
       <div margin="0">
@@ -181,8 +178,8 @@ class Manual extends React.Component {
           </Grid>
 
           <Grid container spacing={0} justifyContent="center">
-            {/* <Button name={"Submit"} />
-                        <Button name={"Reset"} reset={this.onreset}
+            {/* <BButton name={"Submit"} />
+                        <BButton name={"Reset"} reset={this.onreset}
                         /> */}
             <Box m={1} pt={2} display="block">
               <Button variant="contained" onClick={this.onreset}>
@@ -193,7 +190,7 @@ class Manual extends React.Component {
               <Button
                 variant="contained"
                 onClick={this.onSubmit}
-                disabled={this.state.submitDiabled}
+                disabled={this.state.SubmitDiabled}
               >
                 Submit
               </Button>

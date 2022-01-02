@@ -16,6 +16,9 @@ code {
     monospace;
 }
 
-.navbar h1 {
+.navbar h1
+{
   color: aqua;
+  
+
 }
