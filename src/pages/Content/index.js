@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Contenttime from "./Contenttime";
 
+
+
 import './content.styles.css'
 class App extends React.Component {
  
@@ -17,8 +19,10 @@ class App extends React.Component {
     );
   }
 };
+
 chrome.storage.sync.get("throughextension", function (items){    
   console.log("conten through ex")    
+
   console.log(items.throughextension)
   if(items.throughextension===true)
   {

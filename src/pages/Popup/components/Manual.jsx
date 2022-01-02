@@ -75,6 +75,8 @@ class Manual extends React.Component {
       starting_time: '',
       ending_time: '',
     });
+
+
   }
   check = () => {
     if (
@@ -103,6 +105,8 @@ class Manual extends React.Component {
 
     console.log('i am submit');
 
+
+
     chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
     chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
@@ -128,6 +132,7 @@ class Manual extends React.Component {
     //     StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds
     //   ),
     // });
+
   }
   render() {
     return (
