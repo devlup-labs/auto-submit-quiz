@@ -28,7 +28,7 @@ class Popup extends React.Component {
     if (this.state.tab === 0) MainContent = <Content />;
     if (this.state.tab === 1) MainContent = <UpcomingAlarm />;
     return (
-      <div className="App">
+      <div className="App" style={{ height: 400 }}>
         <Navbar />
         {MainContent}
         <Footer data={this.changeTab} />

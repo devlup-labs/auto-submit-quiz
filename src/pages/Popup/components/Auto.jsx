@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 class Auto extends React.Component {
@@ -18,13 +18,20 @@ class Auto extends React.Component {
   render() {
     return (
       <div>
-        <form noValidate autoComplete="off">
-          <Box p={4} justifyContent="center">
-            <Button variant="contained" onClick={this.onSubmitAuto}>
-              Submit
-            </Button>
-          </Box>
-        </form>
+        <Box
+          p={2}
+          justifyContent="center"
+          // margin={5}
+          marginBottom={7.8}
+          // marginTop={5.1}
+        >
+          <Typography margin={5} marginBottom={7} marginTop={3}>
+            Click to Start the Quiz
+          </Typography>
+          <Button variant="contained" onClick={this.onSubmitAuto}>
+            Find Form
+          </Button>
+        </Box>
       </div>
     );
   }

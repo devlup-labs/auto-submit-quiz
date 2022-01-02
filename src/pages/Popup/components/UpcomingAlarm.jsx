@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import { Margin } from '@mui/icons-material';
 export default class UpcomingAlarm extends Component {
   constructor() {
     super();
@@ -88,10 +89,19 @@ export default class UpcomingAlarm extends Component {
     const { listOfAlarms } = this.state;
     return (
       <div>
-        <Typography pt={2}>Upcoming Alarms</Typography>
-        <Box>
+        <Typography variant="h5" pt={2} marginTop={3}>
+          Upcoming Alarms
+        </Typography>
+        <Box style={{ height: '220px', overflow: 'auto' }}>
           {(listOfAlarms.length > 0 && this.getAlarmsList(listOfAlarms)) || (
-            <div style={{ padding: '1rem' }}>
+            <div
+              style={{
+                padding: '1rem',
+                margin: '25px',
+                // marginBottom: '81px',
+                // marginTop: '90px',
+              }}
+            >
               <Typography>No G-Form to fill</Typography>
             </div>
           )}
