@@ -8,6 +8,7 @@ let throughextension=false
 let DiffBtwStartAndCurrent=-1
 let AutoSumitButton=false
 let AutoFinalValuesAdded=false
+let AlarmNameToBeDisplayed=''
 chrome.runtime.onInstalled.addListener(()=>{
     chrome.storage.sync.set({ flink });
     chrome.storage.sync.set({ start_time });
@@ -16,6 +17,7 @@ chrome.runtime.onInstalled.addListener(()=>{
     chrome.storage.sync.set({ DiffBtwStartAndCurrent });
     chrome.storage.sync.set({ AutoSumitButton });
     chrome.storage.sync.set({ AutoFinalValuesAdded });
+    chrome.storage.sync.set({ AlarmNameToBeDisplayed});
 
     console.log("defaul values set");
 })
@@ -35,7 +37,7 @@ async function onAlarm(alarm) {
 }
 
 var link=""
-var AlramId=""
+var Alarmname=''
 var AlarmTime;
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'sync' && changes.DiffBtwStartAndCurrent?.newValue) {
@@ -48,15 +50,19 @@ chrome.storage.onChanged.addListener((changes, area) => {
            link=items.flink
         });
         AlarmTime=Date.now()+items.DiffBtwStartAndCurrent
-        var AlramName=CreateUniqueAlarmId();
-        console.log(AlramName)
+
+       //var AlramName=CreateUniqueAlarmId();
+      chrome.storage.sync.get("AlarmNameToBeDisplayed", function (items){
+        Alarmname=items.AlarmNameToBeDisplayed
+        console.log(Alarmname)
         chrome.alarms.create(
-            AlramName,
+          Alarmname,
             {when:AlarmTime,periodInMinutes:null},
           )
           console.log(AlarmTime)
         chrome.alarms.onAlarm.addListener(onAlarm);
-        
+      });
+
         return;
     
       }
@@ -88,12 +94,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 //           return;
 //         });
-
-    
-      
-
-      
-
 //     }
 //   });
 
@@ -115,7 +115,4 @@ chrome.storage.onChanged.addListener((changes, area) => {
     }
   });
 
-
-
-    
 

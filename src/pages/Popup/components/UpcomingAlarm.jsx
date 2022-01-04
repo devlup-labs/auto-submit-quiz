@@ -67,10 +67,7 @@ export default class UpcomingAlarm extends Component {
                   <AccessAlarmsIcon />
                 </ListItemIcon>
 
-                <ListItemText
-                  primary={'Hi Alarm here!!'}
-                  secondary={alarm.time}
-                />
+                <ListItemText primary={alarm.name} secondary={alarm.time} />
 
                 <ListItemButton onClick={() => this.deletealarm(alarm.name)}>
                   <ListItemIcon>
