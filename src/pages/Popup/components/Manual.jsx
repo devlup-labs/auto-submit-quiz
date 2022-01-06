@@ -127,42 +127,22 @@ class Manual extends React.Component {
   };
   onSubmit(event) {
     var link = this.state.formlink;
-    //var starttime = this.state.starting_time;
-    var s = new Date(this.state.starting_time);
-
-    s = s.setSeconds(0, 0);
-    console.log(`new ss is ${s}`);
+    var AlarmName = this.state.AlarmName;
+    var AlarmTime = new Date(this.state.starting_time);
+    var StartTimeInMilliseconds = AlarmTime.setSeconds(0, 0);
+    console.log(`new ss is ${StartTimeInMilliseconds}`);
     var endtime = this.state.ending_time;
-    var StartTimeInMilliseconds = s;
-    //var StartTimeInMilliseconds = starttime.getMilliseconds();
     var EndTimeInMilliseconds = Date.parse(endtime);
-
+    chrome.alarms.create(AlarmName, {
+      when: StartTimeInMilliseconds,
+      periodInMinutes: null,
+    });
     console.log('i am submit');
-
     chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
     chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
-    var now = new Date();
-    now = now.setSeconds(0, 0);
-    var CurrentDateAndTimeInMilliSeconds = now;
-    var StartTimeMilliSeconds = s;
-
-    if (StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds <= 0) {
-      chrome.storage.sync.set({
-        DiffBtwStartAndCurrent: 1000,
-      });
-    } else {
-      chrome.storage.sync.set({
-        DiffBtwStartAndCurrent:
-          StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
-      });
-      this.onreset();
-    }
-    // chrome.storage.sync.set({
-    //   DiffBtwStartAndCurrent: Math.abs(
-    //     StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds
-    //   ),
-    // });
+    chrome.storage.sync.set({ SubmitClicked: true });
+    this.onreset();
   }
   render() {
     return (
