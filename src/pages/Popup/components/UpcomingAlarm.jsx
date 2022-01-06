@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
-import { Margin } from '@mui/icons-material';
+
 export default class UpcomingAlarm extends Component {
   constructor() {
     super();

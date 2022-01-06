@@ -49,7 +49,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
         chrome.storage.sync.get("flink", function (items){        
            link=items.flink
         });
-        AlarmTime=Date.now()+items.DiffBtwStartAndCurrent
+        var now=new Date()
+        now = now.setSeconds(0, 0);
+        AlarmTime=now+items.DiffBtwStartAndCurrent
 
        //var AlramName=CreateUniqueAlarmId();
       chrome.storage.sync.get("AlarmNameToBeDisplayed", function (items){

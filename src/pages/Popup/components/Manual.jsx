@@ -52,7 +52,14 @@ class Manual extends React.Component {
     var start = event.target.value;
     var error = false;
     var StartTime = new Date(start);
+    StartTime = StartTime.setSeconds(0, 0);
+    var currenttime = new Date();
+    currenttime = currenttime.setSeconds(0, 0);
+    // currenttime = currenttime.setMinutes(currenttime.getMinutes() + 1);
     if (start === '') {
+      error = true;
+    }
+    if (StartTime < currenttime) {
       error = true;
     }
     await this.setState({
@@ -93,6 +100,10 @@ class Manual extends React.Component {
       formlink: '',
       starting_time: '',
       ending_time: '',
+      EndTimeError: false,
+      SubmitDiabled: true,
+      FormLinkError: false,
+      StartTimeError: false,
     });
   }
   check = () => {
@@ -116,9 +127,14 @@ class Manual extends React.Component {
   };
   onSubmit(event) {
     var link = this.state.formlink;
-    var starttime = this.state.starting_time;
+    //var starttime = this.state.starting_time;
+    var s = new Date(this.state.starting_time);
+
+    s = s.setSeconds(0, 0);
+    console.log(`new ss is ${s}`);
     var endtime = this.state.ending_time;
-    var StartTimeInMilliseconds = Date.parse(starttime);
+    var StartTimeInMilliseconds = s;
+    //var StartTimeInMilliseconds = starttime.getMilliseconds();
     var EndTimeInMilliseconds = Date.parse(endtime);
 
     console.log('i am submit');
@@ -127,10 +143,9 @@ class Manual extends React.Component {
     chrome.storage.sync.set({ flink: link });
     chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
     var now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    now = now.toISOString().slice(0, 16);
-    var CurrentDateAndTimeInMilliSeconds = Date.parse(now);
-    var StartTimeMilliSeconds = Date.parse(starttime);
+    now = now.setSeconds(0, 0);
+    var CurrentDateAndTimeInMilliSeconds = now;
+    var StartTimeMilliSeconds = s;
 
     if (StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds <= 0) {
       chrome.storage.sync.set({
@@ -191,6 +206,7 @@ class Manual extends React.Component {
                 }}
                 value={this.state.starting_time}
                 onChange={this.handletimeChange}
+                error={this.state.StartTimeError}
               />
             </Grid>
             <Grid item>
