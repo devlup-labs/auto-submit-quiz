@@ -13,28 +13,53 @@ class Manual extends React.Component {
       StartTimeError: false,
       EndTimeError: false,
       SubmitDiabled: true,
+      FormLinkError: false,
+      AlarmName: '',
     };
 
     this.handlelinkChange = this.handlelinkChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
     this.handletimeChange = this.handletimeChange.bind(this);
     this.handletimeChangeending = this.handletimeChangeending.bind(this);
     this.onreset = this.onreset.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.check = this.check.bind(this);
   }
-
-  handlelinkChange(event) {
-    var link = event.target.value;
-
+  handleNameChange = async (event) => {
+    var name = event.target.value;
     this.setState({
-      formlink: link,
+      AlarmName: name,
     });
-  }
+    chrome.storage.sync.set({ AlarmNameToBeDisplayed: name });
+  };
+
+  handlelinkChange = async (event) => {
+    var link = event.target.value;
+    var error = false;
+    if (
+      link.match('https://forms.gle+') === null &&
+      link.match('https://docs.google.com/forms+') === null
+    ) {
+      error = true;
+    }
+    await this.setState({
+      formlink: link,
+      FormLinkError: error,
+    });
+    this.check();
+  };
   handletimeChange = async (event) => {
     var start = event.target.value;
     var error = false;
     var StartTime = new Date(start);
+    StartTime = StartTime.setSeconds(0, 0);
+    var currenttime = new Date();
+    currenttime = currenttime.setSeconds(0, 0);
+    // currenttime = currenttime.setMinutes(currenttime.getMinutes() + 1);
     if (start === '') {
+      error = true;
+    }
+    if (StartTime < currenttime) {
       error = true;
     }
     await this.setState({
@@ -71,18 +96,21 @@ class Manual extends React.Component {
   onreset(event) {
     console.log('i am reset');
     this.setState({
+      AlarmName: '',
       formlink: '',
       starting_time: '',
       ending_time: '',
-    });
-    chrome.alarms.clear('Open the form', function () {
-      console.log('Alarm cleared Enter the new values');
+      EndTimeError: false,
+      SubmitDiabled: true,
+      FormLinkError: false,
+      StartTimeError: false,
     });
   }
   check = () => {
     if (
       this.state.EndTimeError === false &&
       this.state.StartTimeError === false &&
+      this.state.FormLinkError === false &&
       this.state.ending_time !== '' &&
       this.state.starting_time !== ''
     ) {
@@ -99,41 +127,38 @@ class Manual extends React.Component {
   };
   onSubmit(event) {
     var link = this.state.formlink;
-    var starttime = this.state.starting_time;
+    var AlarmName = this.state.AlarmName;
+    var AlarmTime = new Date(this.state.starting_time);
+    var StartTimeInMilliseconds = AlarmTime.setSeconds(0, 0);
+    console.log(`new ss is ${StartTimeInMilliseconds}`);
     var endtime = this.state.ending_time;
-    var StartTimeInMilliseconds = Date.parse(starttime);
     var EndTimeInMilliseconds = Date.parse(endtime);
-
+    chrome.alarms.create(AlarmName, {
+      when: StartTimeInMilliseconds,
+      periodInMinutes: null,
+    });
     console.log('i am submit');
-    chrome.storage.sync.set({ throughextension: true });
     chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
     chrome.storage.sync.set({ flink: link });
     chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
-    var now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    now = now.toISOString().slice(0, 16);
-    var CurrentDateAndTimeInMilliSeconds = Date.parse(now);
-    var StartTimeMilliSeconds = Date.parse(starttime);
-
-    if (
-      StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds <= 8000 &&
-      StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds >= 0
-    ) {
-      chrome.storage.sync.set({
-        DiffBtwStartAndCurrent: 1000,
-      });
-    } else {
-      chrome.storage.sync.set({
-        DiffBtwStartAndCurrent:
-          StartTimeMilliSeconds - CurrentDateAndTimeInMilliSeconds,
-      });
-    }
+    chrome.storage.sync.set({ SubmitClicked: true });
+    this.onreset();
   }
   render() {
     return (
       <div margin="0">
         <form noValidate autoComplete="off">
           <Box m={1}>
+            <TextField
+              id="standard-basic"
+              label="Alarm Name"
+              variant="standard"
+              size="large"
+              fullWidth
+              fontSize="50"
+              value={this.state.AlarmName}
+              onChange={this.handleNameChange}
+            ></TextField>
             <TextField
               id="standard-basic"
               label="Form Link"
@@ -143,6 +168,7 @@ class Manual extends React.Component {
               fontSize="50"
               value={this.state.formlink}
               onChange={this.handlelinkChange}
+              error={this.state.FormLinkError}
             ></TextField>
           </Box>
 
@@ -160,6 +186,7 @@ class Manual extends React.Component {
                 }}
                 value={this.state.starting_time}
                 onChange={this.handletimeChange}
+                error={this.state.StartTimeError}
               />
             </Grid>
             <Grid item>
@@ -173,6 +200,7 @@ class Manual extends React.Component {
                 }}
                 value={this.state.ending_time}
                 onChange={this.handletimeChangeending}
+                error={this.state.EndTimeError}
               />
             </Grid>
           </Grid>

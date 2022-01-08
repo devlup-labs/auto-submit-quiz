@@ -11,7 +11,7 @@ const CountDownTimer = ({ hoursMinSecs }) => {
   ]);
   const tick = () => {
     if (hrs === 0 && mins === 0 && secs === 0) reset();
-    else if (hrs === 0 && mins === 0 && secs === 55) {
+    else if (hrs === 0 && mins === 0 && secs === 1) {
       autosubmit();
       setTime([hrs, mins, secs - 1]);
     } else if (mins === 0 && secs === 0) {

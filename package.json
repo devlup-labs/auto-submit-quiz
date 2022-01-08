@@ -1,5 +1,5 @@
 {
-  "name": "google-form-autosubmit",
+  "name": "quizautosubmit",
   "version": "4.0.1",
   "description": "Google forms auto-submit application built with React JS",
   "license": "MIT",
@@ -26,7 +26,8 @@
     "react": "^17.0.1",
     "react-component-countdown-timer": "^0.1.8",
     "react-dom": "^17.0.1",
-    "react-hot-loader": "^4.13.0"
+    "react-hot-loader": "^4.13.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.17",
