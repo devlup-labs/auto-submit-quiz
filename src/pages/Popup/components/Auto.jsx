@@ -15,8 +15,11 @@ class Auto extends React.Component {
     let queryOptions = { active: true, currentWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
     let url = tab.url;
-    if (url.match('https://classroom.google.com/+') != null) {
-      console.log('its google classroom');
+    if (
+      url.match('https://classroom.google.com/+') != null &&
+      url.includes('/details')
+    ) {
+      console.log('this the page to activate the button ');
       this.setState({
         SubmitDiabled: false,
       });
