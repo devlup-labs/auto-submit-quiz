@@ -1,13 +1,8 @@
-import { v4 as uuidv4 } from 'uuid';
-
 let flink = 'https://docs.google.com/forms/';
 let start_time = '';
 let end_time = '';
 let throughextension = false;
-
 let AutoSumitButton = false;
-let AutoFinalValuesAdded = false;
-let AlarmNameToBeDisplayed = '';
 let SubmitClicked = false;
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({ flink });
@@ -15,16 +10,10 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({ throughextension });
   chrome.storage.sync.set({ end_time });
   chrome.storage.sync.set({ AutoSumitButton });
-  chrome.storage.sync.set({ AutoFinalValuesAdded });
-  chrome.storage.sync.set({ AlarmNameToBeDisplayed });
   chrome.storage.sync.set({ SubmitClicked });
 
   console.log('defaul values set');
 });
-
-function CreateUniqueAlarmId() {
-  return uuidv4();
-}
 
 async function onAlarm(alarm) {
   chrome.storage.sync.set({ throughextension: true });
@@ -48,18 +37,35 @@ chrome.storage.onChanged.addListener((changes, area) => {
     });
   }
 });
-
-var link2 = '';
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'sync' && changes.AutoFinalValuesAdded?.newValue) {
-    chrome.storage.sync.set({ AutoFinalValuesAdded: false });
-    console.log('enable debug mode?');
+// async function getCurrentTab() {
+//   let queryOptions = { active: true, currentWindow: true };
+//   let [tab] = await chrome.tabs.query(queryOptions);
+//   return tab;
+// }
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log('message recieved');
+  if (request.greeting === 'Open the form will you?') {
     chrome.storage.sync.get('flink', function (items) {
-      console.log(items.flink);
-      link2 = items.flink;
-      chrome.tabs.create({ url: link2, active: true });
+      var link = items.flink;
+      chrome.tabs.create({ url: link, active: true });
     });
-    console.log(link2);
-    console.log('2worked');
+
+    sendResponse({ farewell: 'opening Form' });
   }
 });
+// async function gettabinfo() {
+//   let queryOptions = { active: true, currentWindow: true };
+//   let [tab] = await chrome.tabs.query(queryOptions);
+//   return tab.active;
+// }
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+//   console.log('message recieved');
+//   if (request.greeting === 'check the tab is active?') {
+//     let x = gettabinfo();
+//     if (x === true) {
+//       sendResponse({ farewell: 'tab is active' });
+//     } else {
+//       sendResponse({ farewell: 'tab is not active' });
+//     }
+//   }
+// });
