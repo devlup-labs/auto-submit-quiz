@@ -1,6 +1,4 @@
 import React from 'react';
-
-// import CountdownTimer from "react-component-countdown-timer";
 import CountDownTimer from '../Popup/components/Clock';
 
 var hoursMinSecs = { hours: 3, minutes: 20, seconds: 40 };
@@ -11,10 +9,11 @@ chrome.storage.sync.get('start_time', function (items) {
   start = items.start_time;
   console.log(start);
 });
+
 chrome.storage.sync.get('end_time', function (items) {
-  //console.log(items.end_time )
   end = items.end_time;
 });
+
 function GetTimeDiffInHoursMinutesSeconds(diff) {
   var msec = diff;
   var hh = Math.floor(msec / 1000 / 60 / 60);

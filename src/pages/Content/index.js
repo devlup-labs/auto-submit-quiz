@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Contenttime from './Contenttime';
-
 import './content.styles.css';
+
 class App extends React.Component {
   render() {
     return (
