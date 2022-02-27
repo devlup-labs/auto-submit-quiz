@@ -1,6 +1,5 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import { Button, Grid } from '@mui/material';
 
 class Manual extends React.Component {
@@ -146,85 +145,71 @@ class Manual extends React.Component {
   }
   render() {
     return (
-      <div margin="0">
-        <form noValidate autoComplete="off">
-          <Box m={1}>
-            <TextField
-              id="standard-basic"
-              label="Alarm Name"
-              variant="standard"
-              size="large"
-              fullWidth
-              fontSize="50"
-              value={this.state.AlarmName}
-              onChange={this.handleNameChange}
-            ></TextField>
-            <TextField
-              id="standard-basic"
-              label="Form Link"
-              variant="standard"
-              size="large"
-              fullWidth
-              fontSize="50"
-              value={this.state.formlink}
-              onChange={this.handlelinkChange}
-              error={this.state.FormLinkError}
-            ></TextField>
-          </Box>
+      <div style={{ height: '300px' }}>
+        <TextField
+          id="standard-basic"
+          label="Name"
+          variant="standard"
+          type="text"
+          autoComplete="off"
+          style={{ width: '90%', marginTop: '8px' }}
+          value={this.state.AlarmName}
+          onChange={this.handleNameChange}
+        />
+        <TextField
+          id="standard-basic"
+          label="Form Link"
+          variant="standard"
+          autoComplete="off"
+          style={{ width: '90%', marginTop: '8px' }}
+          value={this.state.formlink}
+          onChange={this.handlelinkChange}
+          error={this.state.FormLinkError}
+        />
+        <TextField
+          size="small"
+          id="date"
+          label="Start Time"
+          type="datetime-local"
+          style={{ width: '90%', marginTop: '1rem' }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={this.state.starting_time}
+          onChange={this.handletimeChange}
+          error={this.state.StartTimeError}
+        />
+        <TextField
+          size="small"
+          id="date"
+          label="End Time"
+          type="datetime-local"
+          style={{ width: '90%', marginTop: '1rem' }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={this.state.ending_time}
+          onChange={this.handletimeChangeending}
+          error={this.state.EndTimeError}
+        />
 
-          <Grid container style={{ gap: 15 }} justifyContent="center">
-            <Grid item></Grid>
-            <Grid item>
-              <TextField
-                size="small"
-                id="date"
-                label="Start Time"
-                type="datetime-local"
-                //type="time"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={this.state.starting_time}
-                onChange={this.handletimeChange}
-                error={this.state.StartTimeError}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                size="small"
-                id="date"
-                label="End Time"
-                type="datetime-local"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={this.state.ending_time}
-                onChange={this.handletimeChangeending}
-                error={this.state.EndTimeError}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={0} justifyContent="center">
-            {/* <BButton name={"Submit"} />
-                        <BButton name={"Reset"} reset={this.onreset}
-                        /> */}
-            <Box m={1} pt={2} display="block">
-              <Button variant="contained" onClick={this.onreset}>
-                Reset
-              </Button>
-            </Box>
-            <Box m={1} pt={2} display="block">
-              <Button
-                variant="contained"
-                onClick={this.onSubmit}
-                disabled={this.state.SubmitDiabled}
-              >
-                Submit
-              </Button>
-            </Box>
-          </Grid>
-        </form>
+        <Grid container justifyContent="center">
+          <Button
+            variant="contained"
+            style={{ margin: '1.5rem 1rem 1rem', borderRadius: '2rem' }}
+            onClick={this.onSubmit}
+            disabled={this.state.SubmitDiabled}
+          >
+            Submit
+          </Button>
+          <Button
+            style={{ margin: '1.5rem 1rem 1rem', borderRadius: '2rem' }}
+            variant="contained"
+            onClick={this.onreset}
+          >
+            Reset
+          </Button>
+        </Grid>
       </div>
     );
   }

@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import { Button, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 
 class Auto extends React.Component {
   constructor(props) {
@@ -11,6 +9,7 @@ class Auto extends React.Component {
     };
     this.onSubmitAuto = this.onSubmitAuto.bind(this);
   }
+
   async componentDidMount() {
     let queryOptions = { active: true, currentWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
@@ -25,6 +24,7 @@ class Auto extends React.Component {
       });
     }
   }
+
   onSubmitAuto(event) {
     console.log('auto submit button is working');
     chrome.storage.sync.set({ AutoSumitButton: true });
@@ -32,25 +32,41 @@ class Auto extends React.Component {
 
   render() {
     return (
-      <div>
-        <Box
-          p={2}
-          justifyContent="center"
-          // margin={5}
-          marginBottom={7.8}
-          // marginTop={5.1}
-        >
-          <Typography margin={5} marginBottom={7} marginTop={3}>
-            Click to Start the Quiz
-          </Typography>
-          <Button
-            variant="contained"
-            disabled={this.state.SubmitDiabled}
-            onClick={this.onSubmitAuto}
-          >
-            Find Form
-          </Button>
-        </Box>
+      <div
+        style={{
+          width: 'auto',
+          height: '300px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '1rem',
+        }}
+      >
+        {this.state.SubmitDiabled === true ? (
+          <div style={{ padding: '0 1.5rem' }}>
+            This is not a Google Classroom Assignment Page{' '}
+            <span role="img" aria-label="alarm">
+              😕
+            </span>
+          </div>
+        ) : (
+          <div style={{ padding: '0 1.5rem', flexDirection: 'column' }}>
+            Click the button to find a Google Form{' '}
+            <span role="img" aria-label="alarm">
+              📝
+            </span>{' '}
+            link on this page
+            <div>
+              <Button
+                variant="contained"
+                style={{ borderRadius: '2rem', marginTop: '1rem' }}
+                onClick={this.onSubmitAuto}
+              >
+                Find Form
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
