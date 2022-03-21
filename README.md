@@ -9,7 +9,7 @@ Frontend made with React Js along with various chrome Apis
 
 ## Description
 
-![Popup Page](assets\popup.jpeg)
+<img src="assets\popup.jpeg" alt="Popup Page" title="Popup Page" />
 
 ### Manual Submit
 
@@ -19,10 +19,9 @@ Frontend made with React Js along with various chrome Apis
   <li>Google form will get auto-submitted when the time runs out  </li>
   <li>All the upcoming alarms can be seen in the Alarms </li>
 
-![Alarms](assets\alarms.jpeg)
+<img src="assets\alarms.jpeg" alt="Alarms" title="Alarms" />
 
-![No alarms](assets\noalarm.jpeg)
-
+<img src="assets\noalarm.jpeg" alt="No alarms" title="No alarms" /> 
 </ul>
 
 ### Auto Submit
@@ -30,9 +29,8 @@ Frontend made with React Js along with various chrome Apis
 <ul>
   <li>Find Form button will be disabled if any webpage except the assignments page of the classroom is opened</li>
 
-![noassignment](assets\NOASSIGNMENT.jpeg)
-
-![yesassign](assets\yesassgnment.jpeg)
+<img src="assets\NOASSIGNMENT.jpeg" alt="noassignment" title="noassignment" />
+<img src="assets\yesassgnment.jpeg" alt="yesassign" title="yesassign" />
 
   <li> Find form button the extension will auto fetch the ending time and form link from the page and will open the form on a new tab with a timer of the time difference between the starting and ending time
 </li>
