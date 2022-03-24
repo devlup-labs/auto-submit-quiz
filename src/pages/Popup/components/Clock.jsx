@@ -37,17 +37,9 @@ const CountDownTimer = ({ hoursMinSecs }) => {
     } else setTime([hrs, parseInt(mins) + 1, secs]);
   }
   function autosubmit() {
-    if (
-      document.querySelector(
-        'div.freebirdFormviewerViewNavigationNavControls > div > div > div'
-      )
-    ) {
+    if (document.querySelector('.ThHDze > div > div >div')) {
       // chrome.storage.sync.set({"throughextension":false})
-      document
-        .querySelector(
-          'div.freebirdFormviewerViewNavigationNavControls > div > div > div'
-        )
-        .click();
+      document.querySelector('.ThHDze > div > div >div').click();
       setTime([0, 0, 0]);
     } else {
       return;
