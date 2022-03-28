@@ -1,12 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "google-forms-autosubmit",
+  "name": "Google Forms Autosubmit",
 
   "background": {
     "service_worker": "background.bundle.js"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "128": "icon-128.png"
+    }
   },
   "cross_origin_embedder_policy": {
     "value": "require-corp"
