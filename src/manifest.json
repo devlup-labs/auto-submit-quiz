@@ -9,8 +9,9 @@
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon-16.png",
-
-      "128": "icon-128.png"
+      "32": "icon-32.png",
+      "64": "icon-64.png",
+      "128": "icon-12s8.png"
     }
   },
   "cross_origin_embedder_policy": {

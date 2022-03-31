@@ -99,16 +99,13 @@ var options = {
   },
 
   resolve: {
-
     alias: alias,
     extensions: fileExtensions
       .map((extension) => '.' + extension)
       .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
     fallback: {
-      "path": require.resolve("path-browserify")
-    }
-
-
+      path: require.resolve('path-browserify'),
+    },
   },
 
   plugins: [
@@ -157,12 +154,12 @@ var options = {
         },
       ],
     }),
+
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'src/assets/img/icon-34.png',
+          from: 'src/assets/img',
           to: path.join(__dirname, 'build'),
-          force: true,
         },
       ],
     }),
@@ -173,8 +170,6 @@ var options = {
       chunks: ['popup'],
       cache: false,
     }),
-
-
   ],
   infrastructureLogging: {
     level: 'info',
@@ -195,4 +190,3 @@ if (env.NODE_ENV === 'development') {
 }
 
 module.exports = options;
-
