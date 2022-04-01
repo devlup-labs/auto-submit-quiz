@@ -1,6 +1,6 @@
 {
   "name": "google-forms-autosubmit",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Google forms auto-submit application built with React JS",
   "license": "MIT",
   "repository": {
