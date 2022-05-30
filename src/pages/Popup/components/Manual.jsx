@@ -1,148 +1,144 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import { Button, Grid } from '@mui/material';
+import { addCustomAlarm } from '../scripts/alarm.js';
 
 class Manual extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formlink: '',
-      starting_time: '',
-      ending_time: '',
-      StartTimeError: false,
-      EndTimeError: false,
-      SubmitDiabled: true,
-      FormLinkError: false,
-      AlarmName: '',
+      formLink: '',
+      startTime: '',
+      endTime: '',
+      nameError: false,
+      startTimeError: false,
+      endTimeError: false,
+      submitDiabled: true,
+      formLinkError: false,
+      alarmName: '',
     };
-
-    this.handlelinkChange = this.handlelinkChange.bind(this);
+    this.handleLinkChange = this.handleLinkChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
-    this.handletimeChange = this.handletimeChange.bind(this);
-    this.handletimeChangeending = this.handletimeChangeending.bind(this);
-    this.onreset = this.onreset.bind(this);
+    this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
+    this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+    this.onReset = this.onReset.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.check = this.check.bind(this);
+    this.formFieldCheck = this.formFieldCheck.bind(this);
   }
+
   handleNameChange = async (event) => {
     var name = event.target.value;
+    var tempNameError = false;
+    if (name === '') {
+      tempNameError = true;
+    }
     this.setState({
-      AlarmName: name,
+      alarmName: name,
+      nameError: tempNameError,
     });
-    chrome.storage.sync.set({ AlarmNameToBeDisplayed: name });
+    chrome.storage.sync.set({ alarmNameToBeDisplayed: name });
+    this.formFieldCheck();
   };
 
-  handlelinkChange = async (event) => {
+  handleLinkChange = async (event) => {
     var link = event.target.value;
-    var error = false;
+    var tempLinkError = false;
     if (
-      link.match('https://forms.gle+') === null &&
-      link.match('https://docs.google.com/forms+') === null
+      !link.match('https://forms.gle+') &&
+      !link.match('https://docs.google.com/forms+')
     ) {
-      error = true;
+      tempLinkError = true;
     }
     await this.setState({
-      formlink: link,
-      FormLinkError: error,
+      formLink: link,
+      formLinkError: tempLinkError,
     });
-    this.check();
+    this.formFieldCheck();
   };
-  handletimeChange = async (event) => {
+
+  handleStartTimeChange = async (event) => {
     var start = event.target.value;
-    var error = false;
-    var StartTime = new Date(start);
-    StartTime = StartTime.setSeconds(0, 0);
-    var currenttime = new Date();
-    currenttime = currenttime.setSeconds(0, 0);
-    // currenttime = currenttime.setMinutes(currenttime.getMinutes() + 1);
-    if (start === '') {
-      error = true;
-    }
-    if (StartTime < currenttime) {
-      error = true;
+    var tempStartTimeError = false;
+    var startTime = new Date(start);
+    if (start === '' || startTime < new Date()) {
+      tempStartTimeError = true;
     }
     await this.setState({
-      starting_time: start,
-      StartTimeError: error,
+      startTime: start,
+      startTimeError: tempStartTimeError,
     });
-    if (this.state.ending_time !== '') {
-      var endTimeVal = new Date(this.state.ending_time);
-      if (StartTime >= endTimeVal) {
-        error = true;
+    if (this.state.endTime !== '') {
+      var endTimeVal = new Date(this.state.endTime);
+      if (startTime >= endTimeVal && !tempStartTimeError) {
         this.setState({
-          EndTimeError: error,
+          endTimeError: true,
+        });
+      } else {
+        this.setState({
+          endTimeError: false,
         });
       }
     }
-    //console.log(error);
-    this.check();
+    this.formFieldCheck();
   };
-  handletimeChangeending = async (event) => {
+
+  handleEndTimeChange = async (event) => {
     var end = event.target.value;
-    var error = false;
-    var StartTime = new Date(this.state.starting_time);
-    var EndTime = new Date(end);
-    if (end === '' || EndTime < new Date() || StartTime >= EndTime) {
-      error = true;
+    var tempEndTimeError = false;
+    var startTime = new Date(this.state.startTime);
+    var endTime = new Date(end);
+    if (end === '' || endTime < new Date() || startTime >= endTime) {
+      tempEndTimeError = true;
     }
     await this.setState({
-      EndTimeError: error,
-      ending_time: end,
+      endTimeError: tempEndTimeError,
+      endTime: end,
     });
-    //console.log(error);
-    this.check();
+    this.formFieldCheck();
   };
-  onreset(event) {
-    console.log('i am reset');
+
+  onReset = () => {
     this.setState({
-      AlarmName: '',
-      formlink: '',
-      starting_time: '',
-      ending_time: '',
-      EndTimeError: false,
-      SubmitDiabled: true,
-      FormLinkError: false,
-      StartTimeError: false,
+      alarmName: '',
+      formLink: '',
+      startTime: '',
+      endTime: '',
+      nameError: false,
+      endTimeError: false,
+      formLinkError: false,
+      startTimeError: false,
+      submitDiabled: true,
     });
-  }
-  check = () => {
-    if (
-      this.state.EndTimeError === false &&
-      this.state.StartTimeError === false &&
-      this.state.FormLinkError === false &&
-      this.state.ending_time !== '' &&
-      this.state.starting_time !== ''
-    ) {
-      console.log('check is working');
-      this.setState({ SubmitDiabled: false });
-    } else {
-      console.log('check else is working');
-      this.setState({ SubmitDiabled: true });
-    }
-    console.log(this.state.EndTimeError);
-    console.log(this.state.StartTimeError);
-    console.log(this.state.ending_time);
-    console.log(this.state.starting_time);
   };
-  onSubmit(event) {
-    var link = this.state.formlink;
-    var AlarmName = this.state.AlarmName;
-    var AlarmTime = new Date(this.state.starting_time);
-    var StartTimeInMilliseconds = AlarmTime.setSeconds(0, 0);
-    console.log(`new ss is ${StartTimeInMilliseconds}`);
-    var endtime = this.state.ending_time;
-    var EndTimeInMilliseconds = Date.parse(endtime);
-    chrome.alarms.create(AlarmName, {
-      when: StartTimeInMilliseconds,
-      periodInMinutes: null,
-    });
-    console.log('i am submit');
-    chrome.storage.sync.set({ start_time: StartTimeInMilliseconds });
-    chrome.storage.sync.set({ flink: link });
-    chrome.storage.sync.set({ end_time: EndTimeInMilliseconds });
-    chrome.storage.sync.set({ SubmitClicked: true });
-    this.onreset();
-  }
+
+  formFieldCheck = () => {
+    if (
+      this.state.nameError === false &&
+      this.state.endTimeError === false &&
+      this.state.startTimeError === false &&
+      this.state.formLinkError === false &&
+      this.state.alarmName !== '' &&
+      this.state.endTime !== '' &&
+      this.state.startTime !== ''
+    ) {
+      this.setState({ submitDiabled: false });
+    } else {
+      this.setState({ submitDiabled: true });
+    }
+  };
+
+  onSubmit = async () => {
+    var newAlarm = {
+      alarmName: this.state.alarmName,
+      formLink: this.state.formLink,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      submitClicked: true,
+    };
+    await addCustomAlarm(newAlarm);
+    this.onReset();
+  };
+
   render() {
     return (
       <div style={{ height: '300px' }}>
@@ -153,7 +149,7 @@ class Manual extends React.Component {
           type="text"
           autoComplete="off"
           style={{ width: '90%', marginTop: '8px' }}
-          value={this.state.AlarmName}
+          value={this.state.alarmName}
           onChange={this.handleNameChange}
         />
         <TextField
@@ -162,9 +158,9 @@ class Manual extends React.Component {
           variant="standard"
           autoComplete="off"
           style={{ width: '90%', marginTop: '8px' }}
-          value={this.state.formlink}
-          onChange={this.handlelinkChange}
-          error={this.state.FormLinkError}
+          value={this.state.formLink}
+          onChange={this.handleLinkChange}
+          error={this.state.formLinkError}
         />
         <TextField
           size="small"
@@ -175,9 +171,9 @@ class Manual extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-          value={this.state.starting_time}
-          onChange={this.handletimeChange}
-          error={this.state.StartTimeError}
+          value={this.state.startTime}
+          onChange={this.handleStartTimeChange}
+          error={this.state.startTimeError}
         />
         <TextField
           size="small"
@@ -188,9 +184,9 @@ class Manual extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-          value={this.state.ending_time}
-          onChange={this.handletimeChangeending}
-          error={this.state.EndTimeError}
+          value={this.state.endTime}
+          onChange={this.handleEndTimeChange}
+          error={this.state.endTimeError}
         />
 
         <Grid container justifyContent="center">
@@ -198,14 +194,14 @@ class Manual extends React.Component {
             variant="contained"
             style={{ margin: '1.5rem 1rem 1rem', borderRadius: '2rem' }}
             onClick={this.onSubmit}
-            disabled={this.state.SubmitDiabled}
+            disabled={this.state.submitDiabled}
           >
             Submit
           </Button>
           <Button
             style={{ margin: '1.5rem 1rem 1rem', borderRadius: '2rem' }}
             variant="contained"
-            onClick={this.onreset}
+            onClick={this.onReset}
           >
             Reset
           </Button>

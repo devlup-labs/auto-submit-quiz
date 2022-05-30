@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Box,
   List,
   ListItem,
-  Typography,
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
@@ -11,6 +9,10 @@ import {
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import {
+  getAllDataFromStorage,
+  removeDataFromStorage,
+} from '../scripts/storage.js';
 
 export default class UpcomingAlarm extends Component {
   constructor() {
@@ -21,41 +23,40 @@ export default class UpcomingAlarm extends Component {
   }
 
   async componentDidMount() {
+    let data = await getAllDataFromStorage();
     var alarms = await new Promise((resolve) => chrome.alarms.getAll(resolve));
-    const AlarmsList = [];
-    let AlarmsCount = 0;
+    const alarmsList = [];
     var time = new Date();
     for (let i = 0; i < alarms.length; i++) {
       time.setTime(alarms[i].scheduledTime);
-      AlarmsList.push({
+      alarmsList.push({
+        id: alarms[i].name,
         time: time.toLocaleString(),
-        id: AlarmsCount,
-        name: alarms[i].name,
+        name: data[alarms[i].name].alarmName,
       });
-      AlarmsCount++;
     }
-
-    console.log(AlarmsList);
     this.setState({
-      listOfAlarms: AlarmsList,
+      listOfAlarms: alarmsList,
     });
   }
 
-  deleteAlarm = async (name) => {
-    var NewListOfAlarms = this.state.listOfAlarms;
+  deleteAlarm = async (id) => {
+    var newListOfAlarms = this.state.listOfAlarms;
     var index = 0;
-    for (var i = 0; i < NewListOfAlarms.length; i++) {
-      if (NewListOfAlarms[i].name === name) index = i;
+    for (var i = 0; i < newListOfAlarms.length; i++) {
+      if (newListOfAlarms[i].id === id) {
+        index = i;
+        break;
+      }
     }
     if (index > -1) {
-      NewListOfAlarms.splice(index, 1);
+      chrome.alarms.clear(this.state.listOfAlarms[index].id);
+      removeDataFromStorage(this.state.listOfAlarms[index].id);
+      newListOfAlarms.splice(index, 1);
     }
     this.setState({
-      listOfAlarms: NewListOfAlarms,
+      listOfAlarms: newListOfAlarms,
     });
-
-    console.log(name);
-    chrome.alarms.clear(name);
   };
 
   getAlarmsList = (listOfAlarms) => {
@@ -80,7 +81,7 @@ export default class UpcomingAlarm extends Component {
                     edge="end"
                     aria-label="delete"
                     onClick={() => {
-                      this.deleteAlarm(alarm.name);
+                      this.deleteAlarm(alarm.id);
                     }}
                     style={{ marginRight: '2px' }}
                   >
