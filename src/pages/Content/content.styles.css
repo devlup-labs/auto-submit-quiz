@@ -1,7 +1,7 @@
 .timer-bg {
-  margin-top: 10px;
-  margin-left: 10px;
-  border-radius: 15px;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  border-radius: 1rem;
   background-color: #fff;
   height: 120px;
   width: auto;
@@ -10,5 +10,5 @@
 .heading {
   padding: 3px;
   margin-bottom: 1.5px;
-  margin-top: 1px;
+  margin-top: 1.5px;
 }

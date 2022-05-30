@@ -1,51 +1,128 @@
-import React from 'react';
-import CountDownTimer from '../Popup/components/Clock';
+import React, { useState, useEffect } from 'react';
+import '../Popup/components/Clock.css';
+import { Button, Grid } from '@mui/material';
 
-var hoursMinSecs = { hours: 3, minutes: 20, seconds: 40 };
-var start = 0;
-var end = 0;
+const ContentTime = () => {
+  const [hours, setHours] = useState(1);
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(1);
 
-chrome.storage.sync.get('start_time', function (items) {
-  start = items.start_time;
-  console.log(start);
-});
+  const resetTimer = () => {
+    setHours(0);
+    setMinutes(0);
+    setSeconds(0);
+  };
 
-chrome.storage.sync.get('end_time', function (items) {
-  end = items.end_time;
-});
+  const add = (tempMin) => {
+    if (tempMin === 59) {
+      setHours((hours) => parseInt(hours) + 1);
+      setMinutes(0);
+    } else {
+      setMinutes((minutes) => parseInt(minutes) + 1);
+    }
+  };
 
-function GetTimeDiffInHoursMinutesSeconds(diff) {
-  var msec = diff;
-  var hh = Math.floor(msec / 1000 / 60 / 60);
-  msec -= hh * 1000 * 60 * 60;
-  var mm = Math.floor(msec / 1000 / 60);
-  msec -= mm * 1000 * 60;
-  var ss = Math.floor(msec / 1000);
-  msec -= ss * 1000;
+  const autosubmit = () => {
+    if (document.querySelector('.ThHDze > div > div >div')) {
+      document.querySelector('.ThHDze > div > div >div').click();
+      resetTimer();
+    } else {
+      resetTimer();
+      return;
+    }
+  };
 
-  //alert(hh + ":" + mm + ":" + ss);
-  hoursMinSecs['hours'] = hh;
-  hoursMinSecs['minutes'] = mm;
-}
-class Contenttime extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hours: '7',
-      minutes: '20',
-      seconds: '01',
-    };
+  const tick = () => {
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      return;
+    } else if (hours === 0 && minutes === 0 && seconds === 1) {
+      autosubmit();
+      resetTimer();
+      return;
+    } else if (minutes === 0 && seconds === 0) {
+      setHours((hours) => hours - 1);
+      setMinutes(59);
+      setSeconds(59);
+    } else if (seconds === 0) {
+      setMinutes((minutes) => minutes - 1);
+      setSeconds(59);
+    } else if (seconds > 0) {
+      setSeconds((seconds) => seconds - 1);
+    } else {
+      console.log(`Other`);
+    }
+  };
 
-    GetTimeDiffInHoursMinutesSeconds(end - start);
-    hoursMinSecs['seconds'] = this.state.seconds;
-  }
+  useEffect(async () => {
+    await chrome.storage.sync.get('currentAlarmData', (data) => {
+      var milliseconds =
+        data['currentAlarmData']['endTime'] -
+        data['currentAlarmData']['startTime'];
+      var hour = Math.floor(milliseconds / 1000 / 60 / 60);
+      setHours(hour);
+      milliseconds -= hour * 1000 * 60 * 60;
+      var minute = Math.floor(milliseconds / 1000 / 60);
+      setMinutes(minute);
+      milliseconds -= minute * 1000 * 60;
+      var second = Math.floor(milliseconds / 1000);
+      setSeconds(second);
+      milliseconds -= second * 1000;
+    });
+  }, []);
 
-  render() {
-    return (
-      <div>
-        <CountDownTimer hoursMinSecs={hoursMinSecs} />
+  useEffect(() => {
+    const timer = setInterval(() => {
+      tick();
+      if (hours == 0 && minutes == 0 && seconds == 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  });
+
+  return (
+    <div>
+      <h2 className="heading">Timer</h2>
+      <div className="time">
+        <p className="text">{`${hours.toString().padStart(2, '0')}:${minutes
+          .toString()
+          .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}</p>
       </div>
-    );
-  }
-}
-export default Contenttime;
+      <Grid container spacing={0.5} className="buttons">
+        <Grid item>
+          {' '}
+          <Button
+            className="stopButton"
+            variant="contained"
+            size="small"
+            style={{
+              marginRight: '0.5rem',
+            }}
+            onClick={() => {
+              setHours(0);
+              setMinutes(0);
+              setSeconds(0);
+            }}
+          >
+            Stop
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            size="small"
+            className="addButton"
+            style={{
+              marginLeft: '0.5rem',
+            }}
+            onClick={() => add(minutes)}
+          >
+            Add
+          </Button>
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+export default ContentTime;
