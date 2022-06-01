@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Contenttime from './Contenttime';
+import ContentTime from './ContentTime';
 import './content.styles.css';
+import { getDataFromStorage } from '../Popup/scripts/storage.js';
 
 class App extends React.Component {
   render() {
@@ -10,13 +11,13 @@ class App extends React.Component {
         className="timer-bg"
         style={{ position: 'fixed', textAlign: 'center' }}
       >
-        <h1 className="heading"> {' Timer '} </h1>
-        <Contenttime />
+        <ContentTime />
       </div>
     );
   }
 }
-async function isformpresent() {
+
+function isformpresent() {
   if (
     document.querySelector('div.asQXV.hnID5d') &&
     document.querySelector('div.r0VQac.QRiHXd.Aopndd > a')
@@ -25,26 +26,24 @@ async function isformpresent() {
   }
 }
 
-chrome.storage.sync.get('throughextension', function (items) {
-  console.log('conten through ex');
-  console.log(items.throughextension);
-  if (items.throughextension === true) {
+chrome.storage.sync.get('currentAlarmData', async (data) => {
+  if (data['currentAlarmData']['openedThroughExtension'] === true) {
     let container = document.createElement('div');
     container.setAttribute('id', 'app-wrapper');
     document.body.prepend(container);
-
     ReactDOM.render(<App />, container);
-    // chrome.storage.sync.get('flink', function (items) {
-    //   console.log(items.flink);
-    // });
+    let details = await getDataFromStorage('currentAlarmData');
+    details['openedThroughExtension'] = false;
+    chrome.storage.sync.set({ currentAlarmData: details });
   }
 });
-async function SetValues(CurrentDate, formlink, EndTime3) {
+
+async function SetValues(CurrentDate, formLink, EndTime3) {
   console.log(`endtime parse ` + Date.parse(EndTime3));
   console.log(`startime parse ` + Date.parse(CurrentDate));
 
   await chrome.storage.sync.set({ start_time: Date.parse(CurrentDate) });
-  await chrome.storage.sync.set({ flink: formlink });
+  await chrome.storage.sync.set({ flink: formLink });
   await chrome.storage.sync.set({ end_time: Date.parse(EndTime3) });
   chrome.storage.sync.get('flink', function (items) {
     var link = items.flink;
@@ -66,9 +65,9 @@ async function SetValues(CurrentDate, formlink, EndTime3) {
 //   );
 // }
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'sync' && changes.AutoSumitButton?.newValue) {
-    chrome.storage.sync.get('AutoSumitButton', function (items) {
-      if (items.AutoSumitButton === true) {
+  if (area === 'sync' && changes.autoSumitButton?.newValue) {
+    chrome.storage.sync.get('autoSumitButton', function (items) {
+      if (items.autoSumitButton === true) {
         console.log('i am autosubmit content working');
         // isitactive();
         if (
@@ -76,8 +75,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
           document.querySelector('div.r0VQac.QRiHXd.Aopndd > a')
         ) {
           let form = document.querySelector('div.r0VQac.QRiHXd.Aopndd > a');
-          let formlink = form.href;
-          if (formlink.includes('/form')) {
+          let formLink = form.href;
+          if (formLink.includes('/form')) {
             console.log(`it is from `);
             let DueTimeDiv = document.querySelector('div.asQXV.hnID5d');
             let EndTimeTemp = DueTimeDiv.innerText;
@@ -90,17 +89,18 @@ chrome.storage.onChanged.addListener((changes, area) => {
             var EndTime2 = today + ' ' + EndTime1;
             var EndTime3 = new Date(EndTime2);
             let CurrentDate = new Date();
-            SetValues(CurrentDate, formlink, EndTime3);
+            SetValues(CurrentDate, formLink, EndTime3);
 
-            chrome.storage.sync.set({ throughextension: true });
-            chrome.storage.sync.set({ AutoSumitButton: false });
+            chrome.storage.sync.set({ openedThroughExtension: true });
+            chrome.storage.sync.set({ autoSumitButton: false });
           } else {
             alert('No Form Present');
           }
         }
-        chrome.storage.sync.set({ AutoSumitButton: false });
+        chrome.storage.sync.set({ autoSumitButton: false });
       }
     });
   }
 });
-chrome.storage.sync.set({ throughextension: false });
+
+// chrome.storage.sync.set({ openedThroughExtension: false });
